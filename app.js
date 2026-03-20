@@ -1,73 +1,25 @@
-const express = require("express")
+const express = require("express");
+const cors = require("cors");
 
-const app = express()
+const app = express();
 
-// permite recibir JSON
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
 // "base de datos"
-let pedidos = []
+let pedidos = [];
 
-// ver menú
-app.get("/menu", (req, res) => {
-    res.json([
-        { producto: "Lasaña Bolognesa", precio: 12000 },
-        { producto: "Lasaña Pollo", precio: 11000 }
-    ])
-})
-
-// crear pedido
-app.post("/pedido", (req, res) => {
-    const pedido = req.body
-
-    // VALIDACIÓN
-    if (!pedido.producto || !pedido.cantidad) {
-        return res.json({
-            error: "Faltan datos del pedido"
-        })
-    }
-
-    pedidos.push(pedido)
-
-    res.json({
-        mensaje: "Pedido recibido",
-        pedido: pedido
-    })
-})
-
-// ver pedidos
+// endpoints
 app.get("/pedidos", (req, res) => {
-    res.json(pedidos)
-})
+  res.json(pedidos);
+});
 
-
-//
-app.get("/test", (req, res) => {
-    const pedido ={producto: " lasagna bolognesa"}
-
-    pedidos.push(pedido)
-
-    res.json({
-        mensaje: "pedido de prueba agragado" ,
-        pedidos: pedidos
-     })
-})
-
-app.get("/enviar-pedido", (req, res) => {
-    const pedido = {
-        producto: "Lasaña Pollo",
-        cantidad: 2
-    }
-
-    pedidos.push(pedido)
-
-    res.json({
-        mensaje: "Pedido enviado",
-        pedido: pedido
-    })
-
-})
+app.post("/pedidos", (req, res) => {
+  const nuevoPedido = req.body;
+  pedidos.push(nuevoPedido);
+  res.json(nuevoPedido);
+});
 
 app.listen(3000, () => {
-    console.log("Servidor corriendo en puerto 3000")
-})
+  console.log("Servidor corriendo en puerto 3000");
+});
